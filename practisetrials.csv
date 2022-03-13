@@ -1,0 +1,10 @@
+left_image;right_image;trial_type;correct_response;category;task
+stimuli/practise/tornado_grå.png;stimuli/practise/lyn_gul.png;congruent;right;mood;lightning
+stimuli/practise/lyn_grå.png;stimuli/practise/tornado_gul.png;incongruent;left;mood;lightning
+stimuli/practise/zebra_hvid.png;stimuli/practise/blæk_lilla.png;congruent;left;animal;zebra
+stimuli/practise/zebra_lilla.png;stimuli/practise/blæk_hvid.png;incongruent;right;animal;octopus
+stimuli/practise/ost_gul.png;stimuli/practise/chili_rød.png;congruent;left;food;cheese
+stimuli/practise/ost_rød.png;stimuli/practise/chili_gul.png;incongruent;right;food;chili
+stimuli/practise/tornado.png;stimuli/practise/lyn.png;neutral;right;mood;lightning
+stimuli/practise/zebra.png;stimuli/practise/blæk.png;neutral;right;animal;octopus
+stimuli/practise/ost.png;stimuli/practise/chili.png;neutral;left;food;cheese
