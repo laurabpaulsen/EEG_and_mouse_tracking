@@ -2,6 +2,7 @@
 Code used for running experiment using both mouse-tracking and EEG.
 
 Tasks:
+    
     [ ] End trial when you click on either of the bottons
     
     [ ] Put right triggers in the right places
