@@ -14,12 +14,12 @@ Code used for running experiment using both mouse-tracking and EEG.
         [ ] When done make buttons transparent
         
     [ ] Calculate reaction time
-    
-    [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
+
+    [ ] Decide on duration for fixation
     
     [ ] Fix monitor things - currently only works when fullscreen = False
     
-    [ ] Set up experimental trials as well'
+    [ ] Set up experimental trials as well
     
         [ ] Figure out how to repeat three times (do we just copy and paste in the csv-file or is there a smart code implementation)
         
@@ -32,4 +32,9 @@ Code used for running experiment using both mouse-tracking and EEG.
     [ ] Should if frame == 1 be changed to 0??
     
     [ ] Fill out structure in the beginning of .py file
+
+
+    Done: 
+    [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
+
     
