@@ -304,6 +304,7 @@ Tasks:
     [✓] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
     [ ] Fix monitor things - currently only works when fullscreen = False
     [ ] Set up experimental trials as well
+        [ ] Figure out how to repeat three times (do we just copy and paste in the csv-file or is there a smart code implementation)
     [ ] Fix merged dataframe
         [ ] Calculate velocity of mouse
     [ ] Decide on max length of trial and change it 
