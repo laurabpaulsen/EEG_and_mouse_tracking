@@ -1,7 +1,7 @@
 # EGG_and_mouse_tracking
 Code used for running experiment using both mouse-tracking and EEG.
 
-Tasks:
+### TO DO
     
     [ ] End trial when you click on either of the bottons
     
