@@ -12,7 +12,7 @@ Structure:
     FUNCTION FOR EXPERIMENTAL LOOP
     DISPLAY INTRO TEXT AND AWAIT SCANNER TRIGGER
     CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
-    CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS
+    
 
 """
 
@@ -35,7 +35,7 @@ import csv
 
 # Monitor parameters
 MON_DISTANCE = 60  # Distance between subject's eyes and monitor 
-MON_WIDTH = 40  # Width of your monitor in cm
+MON_WIDTH = 20  # Width of your monitor in cm
 MON_SIZE = [1440, 900]  # Pixel-dimensions of your monitor
 FRAME_RATE = 60 # Hz
 SAVE_FOLDER = 'Stroop_mouse_EEG_data/'  # Log is saved to this folder. 
@@ -75,11 +75,11 @@ clock = core.Clock()  # A clock wich will be used throughout the experiment to t
 # Create psychopy window
 my_monitor = monitors.Monitor('testMonitor', width=MON_WIDTH, distance=MON_DISTANCE)  # Create monitor object from the variables above. This is needed to control size of stimuli in degrees.
 my_monitor.setSizePix(MON_SIZE)
-win = visual.Window(monitor = my_monitor, units='deg', fullscr=False, allowGUI=True, color='black', size=(1200, 700))  # Initiate psychopy Window as the object "win", using the myMon object from last line. Use degree as units!
+win = visual.Window(monitor = my_monitor, units = 'deg', fullscr=False, allowGUI=True, color='black', size =[1440, 900])  # Initiate psychopy Window as the object "win", using the myMon object from last line. Use degree as units!
 
 # Prepare Fixation cross
-stim_fix = visual.TextStim(win, '+')
-stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -4])
+stim_fix = visual.TextStim(win, '+', alignText = 'center')
+stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -1.1])
 
 '''
 LOADING IN EXPERIMENTAL DETAILS
@@ -93,26 +93,33 @@ practisedf = practisedf.sample(frac=1).reset_index(drop=True)
 experimentaldf = experimentaldf.sample(frac=1).reset_index(drop=True)
 
 # The word stimulus 
-stim_text = visual.TextStim(win=win, pos=[0,0], height=0.7)
+stim_text = visual.TextStim(win=win, pos=[0,0], height=0.7, alignText='center')
 
 # The image size and position using ImageStim, file info added in trial list below.
+
+stim_left_pos = (-6, 5)
+stim_right_pos = (6, 5)
+stim_size = (5, 5)
+
+
 stim_image_left = visual.ImageStim(win,
     mask=None,
-    pos=(-10, 5),
-    size=(14.0, 10.5),
+    pos=stim_left_pos,
+    size=stim_size,
     ori=1)
 
 stim_image_right = visual.ImageStim(win,
     mask=None,
-    pos=(10, 5),
-    size=(14.0, 10.5),
+    pos=stim_right_pos,
+    size=stim_size,
     ori=1)
+
+button_left = visual.Rect(win, size = stim_size, pos = stim_left_pos, fillColor = 'blue', opacity = 0.3)
+button_right = visual.Rect(win, size = stim_size, pos = stim_right_pos, fillColor = 'red', opacity = 0.3)
+
 
 # Mouse
 mouse = event.Mouse(visible=True, win=win)
-
-button_left = visual.Rect(win, size = (14.0, 10.5), pos = (-10, 5), fillColor = 'blue', opacity = 0.3)
-button_right = visual.Rect(win, size = (14.0, 10.5), pos = (10, 5), fillColor = 'red', opacity = 0.3)
 
 KEYS_QUIT = ['escape','q']  # Keys that quits the experiment
 KEYS_trigger=['t'] # The MR scanner sends a "t" to notify that it is starting
@@ -265,9 +272,9 @@ def run_experiment(trial_list, exp_start):
 
         #check if responses are correct
         if trial['response']=='right':
-            trial['accuracy'] = 1 if trial['correct_response']=='right' else 0
+            trial['accuracy'] = 1 if trial['correct_resp']=='right' else 0
         elif trial['response']=='left':
-            trial['accuracy'] = 1 if trial['correct_response']=='left' else  0
+            trial['accuracy'] = 1 if trial['correct_resp']=='left' else  0
 
         key = event.getKeys(keyList=('escape','q'))
         if key in KEYS_QUIT:
