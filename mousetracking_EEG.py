@@ -9,19 +9,15 @@ The experiment lasts around 10 minutes and has 172 trials (including practice tr
 
 Structure: 
 
+FILL THIS OUT
 
 """
 
 
 # Import the modules that we need in this script
 from __future__ import division
-from re import A
-from this import d
-from turtle import fillcolor
-
 from matplotlib import use
 from psychopy import core, visual, event, gui, monitors, event
-from random import sample
 import pandas as pd
 #from triggers import setParallelData
 import numpy as np
@@ -77,8 +73,8 @@ stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -4])
 
 #EXPERIMANTAL DETAILS
 # Load in csv's with details about trials
-practisedf = pd.read_csv('practisetrials.csv', sep = ';')
-experimentaldf = pd.read_csv('experimentaltrials.csv', sep = ';')
+practisedf = pd.read_csv('trial_info/practisetrials.csv', sep = ';')
+experimentaldf = pd.read_csv('trial_info/experimentaltrials.csv', sep = ';')
 
 # Randomizing the order of the rows in the practise df
 practisedf = practisedf.sample(frac=1).reset_index(drop=True)
@@ -312,7 +308,8 @@ Tasks:
         [ ] Calculate velocity of mouse
     [ ] Decide on max length of trial and change it 
     [ ] Should if frame == 1 be changed to 0??
-    [ ] Put on github
+    [ ] Fill out structure in the beginning
+
 
 Random questions that popped into my mind
     Is it a problem that participants will be moving their eyes given the eye is a dipole? 
