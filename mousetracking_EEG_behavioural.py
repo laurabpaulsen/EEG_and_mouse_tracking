@@ -1,23 +1,31 @@
 """ DESCRIPTION:
 This combined EEG and mouse tracking experiment displays two stimuli on either side of the screen. Before this presentation a word indicates what the participant should click on. The stimuli can either be neutral (line-drawings), color congruent, or color incongruent (color of stimuli switched around). 
-
 The experiment lasts around 10 minutes and has 172 trials (including practice trials)
-
 /Code written by Laura Bock Paulsen 2022, adapted from a OpenSesame experiment by Jessica Clarke and Sille Hasselbalch.
 /Code inspired by Mikkel Wallentin & Roberta Rocca 2019
 
-
-Structure: 
-
-FILL THIS OUT
+Structure:  
+    GET PARTICIPANT INFO USING GUI
+    PREPARE LOG FILES
+    SPECIFY TIMING AND MONITOR
+    LOADING IN EXPERIMENTAL DETAILS
+    FUNCTION FOR EXPERIMENTAL LOOP
+    DISPLAY INTRO TEXT AND AWAIT SCANNER TRIGGER
+    CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
+    CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS
 
 """
 
 
 # Import the modules that we need in this script
 from __future__ import division
+from re import A
+from this import d
+from turtle import fillcolor
+
 from matplotlib import use
 from psychopy import core, visual, event, gui, monitors, event
+from random import sample
 import pandas as pd
 #from triggers import setParallelData
 import numpy as np
@@ -41,7 +49,9 @@ V = {'ID':'','gender':['female','male','other'],'age':''}
 if not gui.DlgFromDict(dictionary = V, title = 'EEG and Mousetracking Experiment').OK: # dialog box; order is a list of keys 
     core.quit()
 
-# Prepare a csv log-file for both mousetracking data and trial accuracy information
+'''
+PREPARE LOG FILES
+'''
 utc_time = datetime.utcnow()
 filename =  str(SAVE_FOLDER) + str(V['ID']) + str(utc_time) + '.csv'
 
@@ -71,7 +81,9 @@ win = visual.Window(monitor = my_monitor, units='deg', fullscr=False, allowGUI=T
 stim_fix = visual.TextStim(win, '+')
 stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -4])
 
-#EXPERIMANTAL DETAILS
+'''
+LOADING IN EXPERIMENTAL DETAILS
+'''
 # Load in csv's with details about trials
 practisedf = pd.read_csv('trial_info/practisetrials.csv', sep = ';')
 experimentaldf = pd.read_csv('trial_info/experimentaltrials.csv', sep = ';')
@@ -108,7 +120,9 @@ KEYS_trigger=['t'] # The MR scanner sends a "t" to notify that it is starting
 MAX_LENGTH_TRIAL = 140 # The maximum number of frames in each trial
 
 
-### FUNCTIONS ###
+'''
+FUNCTION FOR EXPERIMENTAL LOOP
+'''
 def make_trial_list(trial_df):
     trial_list = []
     
@@ -265,10 +279,14 @@ def run_experiment(trial_list, exp_start):
             
         
     
+'''
+DISPLAY INTRO TEXT AND AWAIT SCANNER TRIGGER
+'''
 
+'''
+CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
+'''
             
-
-
 # PRACTISE LOOP
 practise_list = make_trial_list(trial_df = practisedf)
 exp_start = core.monotonicClock.getTime() ### SAME FOR EXPERIMENTAL LOOP??
@@ -279,7 +297,9 @@ run_experiment(practise_list, exp_start)
 #run_experiment(experimental_list, exp_start)
 
 
-# CREATING ONE DATAFRAME 
+'''
+CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS
+'''
 #columns_from_mouse_df = ['trial_number', 'ID', 'age', 'gender', 'word', 'category','right_img', 'left_img', 'word_trigger','condition_trigger','img_trigger','trial_type', 'ypos', 'xpos']
 #columns_from_accuracy_df = ['trial_number', 'onset_word', 'onset_img']# 'correct_resp', 'rt', 'offset_word','offset_img', 'response', 'accuracy', 'condition_trigger_t', 'key_t']
 
@@ -293,7 +313,3 @@ run_experiment(practise_list, exp_start)
 #filename3 = 'merged/' + str(V['ID']) + str(utc_time) + '.csv'
 #df.to_csv(filename3)
 
-'''
-Random questions that popped into my mind
-    Is it a problem that participants will be moving their eyes given the eye is a dipole? 
-'''

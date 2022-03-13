@@ -4,6 +4,8 @@ Code used for running experiment using both mouse-tracking and EEG.
 ### TO DO
     
     [ ] End trial when you click on either of the bottons
+
+    [ ] Display intro text and await trigger from scanner
     
     [ ] Put right triggers in the right places
     
@@ -29,12 +31,13 @@ Code used for running experiment using both mouse-tracking and EEG.
         
     [ ] Decide on max length of trial and change it 
     
-    [ ] Should if frame == 1 be changed to 0??
-    
-    [ ] Fill out structure in the beginning of .py file
+    [ ] Should if frame == 1 be changed to 0?
+
+    [ ] Fix quit keys
 
 
     Done: 
     [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
+    [X] Fill out structure in the beginning of .py file
 
     
