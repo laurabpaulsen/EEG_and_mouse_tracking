@@ -50,7 +50,7 @@ utc_time = now.strftime("%H_%M_%S")
 
 filename =  str(SAVE_FOLDER) + str(V['ID']) + str(utc_time) + '.csv'
 
-list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase', 'trial_timestamp']
+list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase', 'trial_timestamp', 'click_trigger']
 csvfile = open(filename,'w', newline='')
 writer = csv.DictWriter(csvfile, fieldnames = list_of_columns)
 writer.writeheader()
@@ -86,15 +86,16 @@ experimentaldf = pd.read_csv('trial_info/experimentaltrials.csv', sep = ';')
 # Randomizing the order of the rows in the practise df
 practisedf = practisedf.sample(frac=1).reset_index(drop=True)
 experimentaldf = experimentaldf.sample(frac=1).reset_index(drop=True)
+experimentaldf = pd.concat([experimentaldf]*3, ignore_index=True) # Running the experimental trials three times
 
 # The word stimulus 
 stim_text = visual.TextStim(win=win, pos=[0,0], height=0.7, alignText='center')
 
 # The image size and position using ImageStim, file info added in trial list below.
 
-stim_left_pos = (-6, 5)
-stim_right_pos = (6, 5)
-stim_size = (5, 5)
+stim_left_pos = (-5.5, 3)
+stim_right_pos = (5, 3)
+stim_size = (7, 5)
 
 
 stim_image_left = visual.ImageStim(win,
@@ -119,7 +120,7 @@ mouse = event.Mouse(visible=True, win=win)
 KEYS_QUIT = ['escape','q']  # Keys that quits the experiment
 KEYS_trigger=['t'] # The MR scanner sends a "t" to notify that it is starting
 
-MAX_LENGTH_TRIAL = 300 # The maximum number of frames in each trial
+MAX_LENGTH_TRIAL = 500 # The maximum number of frames in each trial
 
 
 '''
@@ -131,15 +132,17 @@ def make_trial_list(trial_df):
     for i in range(len(trial_df)):
         data = trial_df.loc[i]
         if data['trial_type'] == 'neutral':
-            TRIG_C = 1
+            TRIG_C = 10
             TRIG_I = 11
+            TRIG_W = 12
         if data['trial_type'] == 'congruent':
-            TRIG_C = 2
+            TRIG_C = 20
             TRIG_I = 21
+            TRIG_W = 22
         if data['trial_type'] == 'incongruent':
-            TRIG_C = 3
+            TRIG_C = 30
             TRIG_I = 31
-        
+            TRIG_W = 32
         # Add a dictionary for every trial
         trial_list += [{
             'ID': V['ID'],
@@ -147,7 +150,7 @@ def make_trial_list(trial_df):
             'gender': V['gender'],
             'word':data['task'],
             'category':data['category'],
-            'word_trigger':100,
+            'word_trigger':TRIG_W,
             'condition_trigger':TRIG_C,
             'condition_trigger_t':'',
             'right_img': data['right_image'],
@@ -202,7 +205,7 @@ def run_experiment(trial_list, exp_start):
                 pullTriggerDown = False
 
         # Display fixation cross
-        for frame in range(120):
+        for frame in range(12):
             stim_fix_low.draw()
 
         # Prepare images
@@ -265,7 +268,7 @@ def run_experiment(trial_list, exp_start):
 
 
         # Display fixation cross
-        for frame in range(80): # Pause after each trial with fixation cross
+        for frame in range(30): # Pause after each trial with fixation cross
             stim_fix.draw()
             win.flip()
                    
@@ -290,15 +293,66 @@ def run_experiment(trial_list, exp_start):
 DISPLAY INTRO TEXT AND AWAIT SCANNER TRIGGER
 '''
 
+# Define text objects
+welcome_text= "Welcome to this experiment!\n\n\
+The data collected will be used for a Cognitive Science exam project.\n\n\
+Your data will be anonymised.\n\n\
+By continuing you consent to your data being used for this purpose. It will not be used for other purposes.\n\n\
+\n\n\
+Press any key to continue."
+
+instructions_text="Your task is to click on the specified \n\n\
+item as fast as possible using the computer mouse provided. \n\n\
+The mouse cursor will return to the same starting point after every trial. \n\n\
+\n\n\
+EXAMPLE: \n\n\
+A specified item could be ZEBRA. \n\n\
+Then your task is to click on the Zebra with the computer mouse. \n\n\
+Press any key to continue."
+
+
+practice_text= "First, you will complete six practice trials.\n\n\
+If you have any questions please ask the experimenter.\n\n\
+\n\n\
+Press any key to start."
+
+experimental_text = "Now the experiment will start.\n\n\
+Again, your task is to click on the specified item as fast as possible.\n\n\
+\n\n\
+Press any key to begin!"
+
+goodbye_text="The experiment is now done.\n\n\
+Thank you for participating!\n\n\
+\n\n\
+Press any key to exit."
+
+#Function for showing welcome/goodbye text and waiting for key press
+def msg(txt):
+    message = visual.TextStim(win, text = txt, height = 0.5)
+    message.draw()
+    win.flip()
+    core.wait(1.5)
+    event.waitKeys()
+
+#Show instructions
+msg(welcome_text)
+msg(instructions_text)
+msg(practice_text)
+
+#event.waitKeys(keyList=KEYS_trigger)
+exp_start=core.monotonicClock.getTime()
 
 '''
 CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
 '''
-            
+for frame in range(1*FRAME_RATE):
+     stim_fix.draw()
+     win.flip()
 # PRACTISE LOOP
 practise_list = make_trial_list(trial_df = practisedf)
-exp_start = core.monotonicClock.getTime() ### SAME FOR EXPERIMENTAL LOOP??
 run_experiment(practise_list, exp_start)
+
+msg(experimental_text)
 
 # EXPERIMENTAL LOOP
 #experimental_list = make_trial_list(trial_df = experimentaldf)
@@ -307,6 +361,7 @@ run_experiment(practise_list, exp_start)
 csvfile.close()
 csvfile2.close()
 
+msg(goodbye_text)
 
 '''
 CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS

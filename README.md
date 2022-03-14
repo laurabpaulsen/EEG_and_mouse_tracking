@@ -2,20 +2,16 @@
 Code used for running experiment using both mouse-tracking and EEG.
 
 ### TO DO
-    - [ ] Display intro text and await trigger from scanner
-    - [ ] Put right triggers in the right places
-        - [ ] Trigger for clicking?
-    - [ ] Check that right and left img + buttons are in the right places
-        - [ ] When done make buttons transparent
-    - [ ] Decide on duration for fixation
+    - [ ] When done make buttons transparent
     - [ ] Set up experimental trials as well
-        - [ ] Figure out how to repeat three times (do we just copy and paste in the csv-file or is there a smart code implementation)
-    - [ ] Decide on max length of trial and change it 
     - [ ] Fix quit keys
     - [ ] Fix discrepancy between buttons and where it works to click wtf???
     - [ ] Check how file looks when including both experimental and practise trials
     - [ ] Check that we can use the mousetrap package in R
+    - [ ] Add please start moving if no mouse-movement is detected within 1 second (60 Hz)
 
+    - [X] Await trigger from scanner
+    - [X] Put right triggers in the right places    
     - [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
     - [X] Fill out structure in the beginning of .py file
     - [X] Calculate reaction time
@@ -25,3 +21,8 @@ Code used for running experiment using both mouse-tracking and EEG.
         - [-] Calculate velocity of mouse (Not needed seems we can use the mousetrap package in R)
     - [X] Better file name
     - [-] If no click, then empty string in columns for accuracy dataframe (not needed already empty)
+    - [X] Decide on duration for fixation
+    - [X] Check that right and left img + buttons are in the right places
+    - [X] Figure out how to repeat three times
+    - [X] Decide on max length of trial and change it
+    - [X] Display intro text
