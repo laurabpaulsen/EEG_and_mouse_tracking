@@ -355,8 +355,8 @@ run_experiment(practise_list, exp_start)
 msg(experimental_text)
 
 # EXPERIMENTAL LOOP
-#experimental_list = make_trial_list(trial_df = experimentaldf)
-#run_experiment(experimental_list, exp_start)
+experimental_list = make_trial_list(trial_df = experimentaldf)
+run_experiment(experimental_list, exp_start)
 
 csvfile.close()
 csvfile2.close()
