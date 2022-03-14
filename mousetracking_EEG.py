@@ -24,6 +24,7 @@ import pandas as pd
 #from triggers import setParallelData
 from datetime import datetime
 import csv
+from triggers import setParallelData
 
 
 # Monitor parameters
@@ -229,11 +230,11 @@ def run_experiment(trial_list, exp_start):
             button_click_left.draw()
 
             if frame==1:
-                #win.callOnFlip(setParallelData, trial['img_trigger'])  # pull trigger up
+                win.callOnFlip(setParallelData, trial['img_trigger'])  # pull trigger up
                 pullTriggerDown = True
             win.flip()
             if pullTriggerDown:
-                #win.callOnFlip(setParallelData, 0)
+                win.callOnFlip(setParallelData, 0)
                 pullTriggerDown = False
 
             #Log values
@@ -251,10 +252,8 @@ def run_experiment(trial_list, exp_start):
             
         
 
-            # checking for mouse clicks on stimuli DOES NOT WORK CURRENTLY
-            #buttons = mouse.getPressed()
+            # checking for mouse clicks on stimuli
             if mouse.isPressedIn(button_click_left):
-                #if (buttons == [1, 0, 0] and button_left.contains(mouse.getPos())):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'left'
                 trial['key_t']=time_click-exp_start
@@ -262,7 +261,6 @@ def run_experiment(trial_list, exp_start):
                 break # break out of loop and go to next trial
 
             elif mouse.isPressedIn(button_click_right):
-                #if (buttons == [1, 0, 0] and button_right.contains(mouse.getPos())):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'right'  
                 trial['key_t']=time_click - exp_start
