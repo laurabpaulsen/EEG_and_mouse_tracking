@@ -19,16 +19,10 @@ Structure:
 
 # Import the modules that we need in this script
 from __future__ import division
-from re import A
-from this import d
-from turtle import fillcolor
-
-from matplotlib import use
 from psychopy import core, visual, event, gui, monitors, event
 from random import sample
 import pandas as pd
 #from triggers import setParallelData
-import numpy as np
 from datetime import datetime
 import csv
 
@@ -55,7 +49,7 @@ PREPARE LOG FILES
 utc_time = datetime.utcnow()
 filename =  str(SAVE_FOLDER) + str(V['ID']) + str(utc_time) + '.csv'
 
-list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'display_word', 'pause_before_stimuli', 'duration_frames']
+list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase']
 csvfile = open(filename,'w', newline='')
 writer = csv.DictWriter(csvfile, fieldnames = list_of_columns)
 writer.writeheader()
@@ -75,7 +69,7 @@ clock = core.Clock()  # A clock wich will be used throughout the experiment to t
 # Create psychopy window
 my_monitor = monitors.Monitor('testMonitor', width=MON_WIDTH, distance=MON_DISTANCE)  # Create monitor object from the variables above. This is needed to control size of stimuli in degrees.
 my_monitor.setSizePix(MON_SIZE)
-win = visual.Window(monitor = my_monitor, units = 'deg', fullscr=False, allowGUI=True, color='black', size =[1440, 900])  # Initiate psychopy Window as the object "win", using the myMon object from last line. Use degree as units!
+win = visual.Window(monitor = my_monitor, units = 'deg', fullscr=True, allowGUI=True, color='black')  # Initiate psychopy Window as the object "win", using the myMon object from last line. Use degree as units!
 
 # Prepare Fixation cross
 stim_fix = visual.TextStim(win, '+', alignText = 'center')
@@ -165,13 +159,11 @@ def make_trial_list(trial_df):
             'response': '',
             'key_t':'',
             'rt': '',
-            'duration_frames': 60,
-            'display_word': 60,
-            'pause_before_stimuli': 60,
             'correct_resp': data['correct_response'],
             'accuracy': '',
             'trial_type':data['trial_type'],
-            'trial_number': i + 1
+            'trial_number': i + 1,
+            'phase': data['phase']
         }]
     return trial_list
 
@@ -195,7 +187,7 @@ def run_experiment(trial_list, exp_start):
         print(stim_text.text)
         time_flip_word = core.monotonicClock.getTime() #onset of stimulus
 
-        for frame in range(trial['display_word']):
+        for frame in range(60):
             stim_text.draw()
             if frame==1:
                 #win.callOnFlip(setParallelData, trial['word_trigger']) 
@@ -244,16 +236,16 @@ def run_experiment(trial_list, exp_start):
 
             # checking for mouse clicks on stimuli DOES NOT WORK CURRENTLY
             buttons = mouse.getPressed()
-            #if mouse.isPressedIn(button_left, buttons=[0]):
-            if (buttons == [1, 0, 0] and button_left.contains(mouse.getPos())):
+            if mouse.isPressedIn(button_left):
+                #if (buttons == [1, 0, 0] and button_left.contains(mouse.getPos())):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'left'
                 trial['key_t']=time_click-exp_start
                 trial['rt'] = time_click-time_flip_img
                 break # break out of loop and go to next trial
 
-            #elif mouse.isPressedIn(button_right, buttons=[0]):
-            if (buttons == [1, 0, 0] and button_right.contains(mouse.getPos())):
+            elif mouse.isPressedIn(button_right):
+                #if (buttons == [1, 0, 0] and button_right.contains(mouse.getPos())):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'right'  
                 trial['key_t']=time_click - exp_start
@@ -290,6 +282,7 @@ def run_experiment(trial_list, exp_start):
 DISPLAY INTRO TEXT AND AWAIT SCANNER TRIGGER
 '''
 
+
 '''
 CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
 '''
@@ -307,7 +300,7 @@ run_experiment(practise_list, exp_start)
 '''
 CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS
 '''
-#columns_from_mouse_df = ['trial_number', 'ID', 'age', 'gender', 'word', 'category','right_img', 'left_img', 'word_trigger','condition_trigger','img_trigger','trial_type', 'ypos', 'xpos']
+#columns_from_mouse_df = ['trial_number', 'ID', 'age', 'gender', 'word', 'category','right_img', 'left_img', 'word_trigger','condition_trigger','img_trigger','trial_type', 'ypos', 'xpos', 'phase']
 #columns_from_accuracy_df = ['trial_number', 'onset_word', 'onset_img']# 'correct_resp', 'rt', 'offset_word','offset_img', 'response', 'accuracy', 'condition_trigger_t', 'key_t']
 
 #mouse_df = pd.read_csv(filename, usecols = columns_from_mouse_df)
