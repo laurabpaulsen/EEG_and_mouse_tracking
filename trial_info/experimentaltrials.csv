@@ -17,10 +17,10 @@ stimuli/experimental/krabbe_rod.png;stimuli/experimental/egern_brun.png;congruen
 stimuli/experimental/egern_rod.png;stimuli/experimental/krabbe_brun.png;incongruent;right;animal;crab;experimental
 stimuli/experimental/elefant_gra.png;stimuli/experimental/flamingo_pink.png;congruent;left;animal;elephant;experimental
 stimuli/experimental/elefant_pink.png;stimuli/experimental/flamingo_gra.png;incongruent;left;animal;elephant;experimental
-stimuli/experimental/glad_gron.png;stimuli/experimental/sur_rod.png;congruent;left;mood;happy_face;experimental
-stimuli/experimental/sur_gron.png;stimuli/experimental/glad_rod.png;incongruent;right;mood;happy_face;experimental
-stimuli/experimental/lidt_strom_gron.png;stimuli/experimental/meget_strom_rod.png;incongruent;right;mood;full_battery;experimental
-stimuli/experimental/lidt_strom_rod.png;stimuli/experimental/meget_strom_gron.png;congruent;left;mood;low_battery;experimental
+stimuli/experimental/glad_gron.png;stimuli/experimental/sur_rod.png;congruent;left;mood;happy face;experimental
+stimuli/experimental/sur_gron.png;stimuli/experimental/glad_rod.png;incongruent;right;mood;happy face;experimental
+stimuli/experimental/lidt_strom_gron.png;stimuli/experimental/meget_strom_rod.png;incongruent;right;mood;full battery;experimental
+stimuli/experimental/lidt_strom_rod.png;stimuli/experimental/meget_strom_gron.png;congruent;left;mood;low battery;experimental
 stimuli/experimental/svane_hvid.png;stimuli/experimental/slange_gron.png;congruent;left;animal;swan;experimental
 stimuli/experimental/slange_hvid.png;stimuli/experimental/svane_gron.png;incongruent;left;animal;snake;experimental
 stimuli/experimental/sne.png;stimuli/experimental/ild.png;neutral;left;mood;snowflake;experimental
@@ -32,8 +32,8 @@ stimuli/experimental/aubergine.png;stimuli/experimental/citron.png;neutral;right
 stimuli/experimental/jordber.png;stimuli/experimental/choko.png;neutral;left;food;strawberry;experimental
 stimuli/experimental/krabbe.png;stimuli/experimental/egern.png;neutral;left;animal;crab;experimental
 stimuli/experimental/flamingo.png;stimuli/experimental/elefant.png;neutral;left;animal;flamingo;experimental
-stimuli/experimental/glad.png;stimuli/experimental/sur.png;neutral;left;mood;happy_face;experimental
-stimuli/experimental/fuld_batteri.png;stimuli/experimental/lav_batteri.png;neutral;right;mood;low_battery;experimental
+stimuli/experimental/glad.png;stimuli/experimental/sur.png;neutral;left;mood;happy face;experimental
+stimuli/experimental/fuld_batteri.png;stimuli/experimental/lav_batteri.png;neutral;right;mood;low battery;experimental
 stimuli/experimental/svane.png;stimuli/experimental/slange.png;neutral;right;animal;snake;experimental
 stimuli/experimental/fro.png;stimuli/experimental/bi.png;neutral;right;animal;bee;experimental
 stimuli/experimental/bretzel.png;stimuli/experimental/avo.png;neutral;left;food;pretzel;experimental

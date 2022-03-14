@@ -32,7 +32,7 @@ MON_DISTANCE = 60  # Distance between subject's eyes and monitor
 MON_WIDTH = 20  # Width of your monitor in cm
 MON_SIZE = [1440, 900]  # Pixel-dimensions of your monitor
 FRAME_RATE = 60 # Hz
-SAVE_FOLDER = 'Stroop_mouse_EEG_data/'  # Log is saved to this folder. 
+SAVE_FOLDER = r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking\Stroop_mouse_EEG_data' # Log is saved to this folder. 
 
 """
 GET PARTICIPANT INFO USING GUI
@@ -49,7 +49,7 @@ PREPARE LOG FILES
 now = datetime.now()
 utc_time = now.strftime("%H_%M_%S")
 
-filename =  str(SAVE_FOLDER) + str(V['ID']) + str(utc_time) + '.csv'
+filename =  str(SAVE_FOLDER)+"\\"+str(V['ID'])+str(utc_time)+'.csv'
 
 list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase', 'trial_timestamp', 'click_trigger']
 csvfile = open(filename,'w', newline='')
@@ -74,15 +74,15 @@ my_monitor.setSizePix(MON_SIZE)
 win = visual.Window(monitor = my_monitor, units = 'deg', fullscr=True, allowGUI=True, color='black')  # Initiate psychopy Window as the object "win", using the myMon object from last line. Use degree as units!
 
 # Prepare Fixation cross
-stim_fix = visual.TextStim(win, '+', alignText = 'center')
+stim_fix = visual.TextStim(win, '+', alignHoriz = 'center')
 stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -1.1]) # FIX THIS SHIT
 
 '''
 LOADING IN EXPERIMENTAL DETAILS
 '''
 # Load in csv's with details about trials
-practisedf = pd.read_csv('trial_info/practisetrials.csv', sep = ';')
-experimentaldf = pd.read_csv('trial_info/experimentaltrials.csv', sep = ';')
+practisedf = pd.read_csv(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking\trial_info\practisetrials.csv', sep = ';')
+experimentaldf = pd.read_csv(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking\trial_info\experimentaltrials.csv', sep = ';')
 
 # Randomizing the order of the rows in the practise df
 practisedf = practisedf.sample(frac=1).reset_index(drop=True)
@@ -90,12 +90,12 @@ experimentaldf = experimentaldf.sample(frac=1).reset_index(drop=True)
 experimentaldf = pd.concat([experimentaldf]*3, ignore_index=True) # Running the experimental trials three times
 
 # The word stimulus 
-stim_text = visual.TextStim(win=win, pos=[0,0], height=0.7, alignText='center')
+stim_text = visual.TextStim(win=win, pos=[0,0], height=0.7, alignHoriz='center')
 
 # The image size and position using ImageStim, file info added in trial list below.
 
-stim_left_pos = (-5.5, 3)
-stim_right_pos = (5.5, 3)
+stim_left_pos = (-7.5,5)
+stim_right_pos = (7.5,5)
 stim_size = (7, 5)
 
 
@@ -113,9 +113,6 @@ stim_image_right = visual.ImageStim(win,
 
 button_left = visual.Rect(win, size = stim_size, pos = stim_left_pos, fillColor = 'blue', opacity = 0.2)
 button_right = visual.Rect(win, size = stim_size, pos = stim_right_pos, fillColor = 'red', opacity = 0.2)
-
-button_click_left = visual.Rect(win, size = (12,9.5), pos = (10,5), fillColor = 'green', opacity = 0.3)
-button_click_right = visual.Rect(win, size = (-12,9.5), pos = (-10,5), fillColor = 'yellow', opacity = 0.3)
 
 
 
@@ -158,8 +155,8 @@ def make_trial_list(trial_df):
             'word_trigger':TRIG_W,
             'condition_trigger':TRIG_C,
             'condition_trigger_t':'',
-            'right_img': data['right_image'],
-            'left_img': data['left_image'],
+            'right_img':(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking/' + data['right_image']),
+            'left_img': (r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking/' + data['left_image']),
             'img_trigger':TRIG_I,
             'onset_word':'',
             'offset_word': '',
@@ -189,7 +186,7 @@ def run_experiment(trial_list, exp_start):
     pullTriggerDown = False
     # Loop over trials
     for trial in trial_list:
-        mouse.setPos(newPos = [0.0, -9])
+        mouse.setPos(newPos = [0.0, -6])
         event.clearEvents()# clear input to make sure that no responses are logged that do not belong to stimulus
         
         # prepare word
@@ -200,13 +197,13 @@ def run_experiment(trial_list, exp_start):
         for frame in range(60):
             stim_text.draw()
             if frame==1:
-                #win.callOnFlip(setParallelData, trial['word_trigger']) 
+                win.callOnFlip(setParallelData, trial['word_trigger']) 
                 pullTriggerDown = True
 
             win.flip()
 
             if pullTriggerDown:
-                #win.callOnFlip(setParallelData, 0)
+                win.callOnFlip(setParallelData, 0)
                 pullTriggerDown = False
 
         # Display fixation cross
@@ -219,15 +216,13 @@ def run_experiment(trial_list, exp_start):
 
 
         # Display images and monitor time + ensure mouse starts in the same place
-        mouse.setPos(newPos = [0.0, -9])
+        mouse.setPos(newPos = [0.0, -6])
         time_flip_img = core.monotonicClock.getTime() #onset of stimulus
         for frame in range(MAX_LENGTH_TRIAL):
             stim_image_right.draw()
             stim_image_left.draw()
             button_right.draw()
             button_left.draw()
-            button_click_right.draw()
-            button_click_left.draw()
 
             if frame==1:
                 win.callOnFlip(setParallelData, trial['img_trigger'])  # pull trigger up
@@ -253,14 +248,14 @@ def run_experiment(trial_list, exp_start):
         
 
             # checking for mouse clicks on stimuli
-            if mouse.isPressedIn(button_click_left):
+            if mouse.isPressedIn(button_left):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'left'
                 trial['key_t']=time_click-exp_start
                 trial['rt'] = time_click-time_flip_img
                 break # break out of loop and go to next trial
 
-            elif mouse.isPressedIn(button_click_right):
+            elif mouse.isPressedIn(button_right):
                 time_click = core.monotonicClock.getTime() 
                 trial['response'] = 'right'  
                 trial['key_t']=time_click - exp_start
@@ -343,7 +338,7 @@ msg(welcome_text)
 msg(instructions_text)
 msg(practice_text)
 
-#event.waitKeys(keyList=KEYS_trigger)
+event.waitKeys(keyList=KEYS_trigger)
 exp_start=core.monotonicClock.getTime()
 
 '''
@@ -359,8 +354,8 @@ run_experiment(practise_list, exp_start)
 msg(experimental_text)
 
 # EXPERIMENTAL LOOP
-# experimental_list = make_trial_list(trial_df = experimentaldf)
-# run_experiment(experimental_list, exp_start)
+#experimental_list = make_trial_list(trial_df = experimentaldf)
+#run_experiment(experimental_list, exp_start)
 
 csvfile.close()
 csvfile2.close()
@@ -377,6 +372,6 @@ mouse_df = pd.read_csv(filename, usecols = columns_from_mouse_df)
 accuracy_df = pd.read_csv(filename2, usecols = columns_from_accuracy_df)
 
 df = mouse_df.merge(accuracy_df, on = ['trial_number', 'phase'], how = 'left')
-filename3 = SAVE_FOLDER + 'merged/' + str(V['ID']) + str(utc_time) + '.csv'
+filename3 = SAVE_FOLDER + r'/merged/' + str(V['ID']) + str(utc_time) + '.csv'
 df.to_csv(filename3)
 
