@@ -74,7 +74,7 @@ win = visual.Window(monitor = my_monitor, units = 'deg', fullscr=True, allowGUI=
 
 # Prepare Fixation cross
 stim_fix = visual.TextStim(win, '+', alignText = 'center')
-stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -1.1])
+stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -1.1]) # FIX THIS SHIT
 
 '''
 LOADING IN EXPERIMENTAL DETAILS
@@ -243,7 +243,7 @@ def run_experiment(trial_list, exp_start):
         
 
             # checking for mouse clicks on stimuli DOES NOT WORK CURRENTLY
-            buttons = mouse.getPressed()
+            #buttons = mouse.getPressed()
             if mouse.isPressedIn(button_left):
                 #if (buttons == [1, 0, 0] and button_left.contains(mouse.getPos())):
                 time_click = core.monotonicClock.getTime() 
