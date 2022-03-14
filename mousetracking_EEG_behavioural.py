@@ -20,7 +20,6 @@ Structure:
 # Import the modules that we need in this script
 from __future__ import division
 from psychopy import core, visual, event, gui, monitors, event
-from random import sample
 import pandas as pd
 #from triggers import setParallelData
 from datetime import datetime
@@ -46,10 +45,12 @@ if not gui.DlgFromDict(dictionary = V, title = 'EEG and Mousetracking Experiment
 '''
 PREPARE LOG FILES
 '''
-utc_time = datetime.utcnow()
+now = datetime.now()
+utc_time = now.strftime("%H_%M_%S")
+
 filename =  str(SAVE_FOLDER) + str(V['ID']) + str(utc_time) + '.csv'
 
-list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase']
+list_of_columns = ['ID', 'age', 'gender', 'word', 'category', 'word_trigger','condition_trigger','right_img', 'left_img','img_trigger','onset_word', 'onset_img', 'correct_resp','trial_type','trial_number', 'ypos', 'xpos', 'rt', 'offset_word', 'key_t', 'offset_img', 'response', 'condition_trigger_t', 'accuracy', 'phase', 'trial_timestamp']
 csvfile = open(filename,'w', newline='')
 writer = csv.DictWriter(csvfile, fieldnames = list_of_columns)
 writer.writeheader()
@@ -118,7 +119,7 @@ mouse = event.Mouse(visible=True, win=win)
 KEYS_QUIT = ['escape','q']  # Keys that quits the experiment
 KEYS_trigger=['t'] # The MR scanner sends a "t" to notify that it is starting
 
-MAX_LENGTH_TRIAL = 140 # The maximum number of frames in each trial
+MAX_LENGTH_TRIAL = 300 # The maximum number of frames in each trial
 
 
 '''
@@ -163,7 +164,8 @@ def make_trial_list(trial_df):
             'accuracy': '',
             'trial_type':data['trial_type'],
             'trial_number': i + 1,
-            'phase': data['phase']
+            'phase': data['phase'],
+            'trial_timestamp': ''
         }]
     return trial_list
 
@@ -229,9 +231,15 @@ def run_experiment(trial_list, exp_start):
             trial['onset_word'] = time_flip_word-exp_start
             trial['onset_img'] = time_flip_img-exp_start
             #trial['pause_trigger_t']=pause_trigger_t-exp_start
+
             #Log values for mouse
             trial['xpos'] = mouse.getPos()[0]
             trial['ypos'] = mouse.getPos()[1]
+
+            #Log trial timestamp
+            time_trial = core.monotonicClock.getTime()
+            trial['trial_timestamp'] = time_trial - time_flip_img
+            
         
 
             # checking for mouse clicks on stimuli DOES NOT WORK CURRENTLY
@@ -296,20 +304,20 @@ run_experiment(practise_list, exp_start)
 #experimental_list = make_trial_list(trial_df = experimentaldf)
 #run_experiment(experimental_list, exp_start)
 
+csvfile.close()
+csvfile2.close()
+
 
 '''
 CREATING ONE MERGED DATAFRAME AND DOING CALCULATIONS
 '''
-#columns_from_mouse_df = ['trial_number', 'ID', 'age', 'gender', 'word', 'category','right_img', 'left_img', 'word_trigger','condition_trigger','img_trigger','trial_type', 'ypos', 'xpos', 'phase']
-#columns_from_accuracy_df = ['trial_number', 'onset_word', 'onset_img']# 'correct_resp', 'rt', 'offset_word','offset_img', 'response', 'accuracy', 'condition_trigger_t', 'key_t']
+columns_from_mouse_df = ['trial_number', 'phase', 'ID', 'age', 'gender', 'word', 'category','right_img', 'left_img', 'condition_trigger','img_trigger','trial_type', 'ypos', 'xpos', 'phase', 'trial_timestamp']
+columns_from_accuracy_df = ['trial_number', 'phase', 'onset_word', 'onset_img', 'correct_resp', 'rt', 'response', 'accuracy', 'condition_trigger_t', 'key_t']
 
-#mouse_df = pd.read_csv(filename, usecols = columns_from_mouse_df)
-#accuracy_df = pd.read_csv(filename2, usecols = columns_from_accuracy_df)
-#df = mouse_df.merge(accuracy_df, on = 'trial_number', how = 'left')
+mouse_df = pd.read_csv(filename, usecols = columns_from_mouse_df)
+accuracy_df = pd.read_csv(filename2, usecols = columns_from_accuracy_df)
 
-# Calculating mouse velocity at any given moment
-# df['velocity'] = 
-
-#filename3 = 'merged/' + str(V['ID']) + str(utc_time) + '.csv'
-#df.to_csv(filename3)
+df = mouse_df.merge(accuracy_df, on = ['trial_number', 'phase'], how = 'left')
+filename3 = SAVE_FOLDER + 'merged/' + str(V['ID']) + str(utc_time) + '.csv'
+df.to_csv(filename3)
 
