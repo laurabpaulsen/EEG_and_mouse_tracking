@@ -3,8 +3,6 @@ stimuli/experimental/ild_orange.png;stimuli/experimental/sne_bla.png;congruent;r
 stimuli/experimental/ild_bla.png;stimuli/experimental/sne_orange.png;incongruent;right;mood;snowflake;experimental
 stimuli/experimental/sol_gul.png;stimuli/experimental/sky_gra.png;congruent;left;mood;sun;experimental
 stimuli/experimental/sol_gra.png;stimuli/experimental/sky_gul.png;incongruent;right;mood;cloud;experimental
-stimuli/experimental/peber_hvid.png;stimuli/experimental/salt_sort.png;incongruent;left;food;pepper;experimental
-stimuli/experimental/salt_hvid.png;stimuli/experimental/peber_sort.png;congruent;right;food;pepper;experimental
 stimuli/experimental/and_gul.png;stimuli/experimental/delfin_bla.png;congruent;right;animal;dolphin;experimental
 stimuli/experimental/and_bla.png;stimuli/experimental/delfin_gul.png;incongruent;left;animal;duck;experimental
 stimuli/experimental/banan_gul.png;stimuli/experimental/eble_rod.png;congruent;right;food;apple;experimental
@@ -25,7 +23,6 @@ stimuli/experimental/svane_hvid.png;stimuli/experimental/slange_gron.png;congrue
 stimuli/experimental/slange_hvid.png;stimuli/experimental/svane_gron.png;incongruent;left;animal;snake;experimental
 stimuli/experimental/sne.png;stimuli/experimental/ild.png;neutral;left;mood;snowflake;experimental
 stimuli/experimental/sky.png;stimuli/experimental/sol.png;neutral;right;mood;sun;experimental
-stimuli/experimental/peber.png;stimuli/experimental/salt.png;neutral;right;food;salt;experimental
 stimuli/experimental/delfin.png;stimuli/experimental/and.png;neutral;left;animal;dolphin;experimental
 stimuli/experimental/eble.png;stimuli/experimental/banan.png;neutral;right;food;banana;experimental
 stimuli/experimental/aubergine.png;stimuli/experimental/citron.png;neutral;right;food;lemon;experimental
