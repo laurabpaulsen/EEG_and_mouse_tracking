@@ -2,15 +2,15 @@
 Code used for running experiment using both mouse-tracking and EEG.
 
 ### TO DO
-    - [ ] When done make buttons transparent
     - [ ] Set up experimental trials as well
-    - [ ] Fix quit keys
-    - [ ] Fix discrepancy between buttons and where it works to click wtf???
     - [ ] Check how file looks when including both experimental and practise trials
     - [ ] Check that we can use the mousetrap package in R
     - [ ] Add please start moving if no mouse-movement is detected within 1 second (60 Hz)
 
+    - [X] When done make buttons transparent    
     - [X] Await trigger from scanner
+    - [X] Fix discrepancy between buttons and where it works to click wtf??? (solution: use windowsss )
+    - [X] Fix quit keys
     - [X] Put right triggers in the right places    
     - [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
     - [X] Fill out structure in the beginning of .py file

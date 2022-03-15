@@ -57,7 +57,7 @@ writer = csv.DictWriter(csvfile, fieldnames = list_of_columns)
 writer.writeheader()
 
 
-filename2 = str(SAVE_FOLDER)+ 'accuracy_' + str(V['ID']) + str(utc_time) + '.csv'
+filename2 = str(SAVE_FOLDER)+ '/accuracy_' + str(V['ID']) + str(utc_time) + '.csv'
 csvfile2 = open(filename2,'w', newline='')
 writer2 = csv.DictWriter(csvfile2, fieldnames = list_of_columns)
 writer2.writeheader()
@@ -81,8 +81,8 @@ stim_fix_low = visual.TextStim(win, '+', pos=[0.0, -1.1]) # FIX THIS SHIT
 LOADING IN EXPERIMENTAL DETAILS
 '''
 # Load in csv's with details about trials
-practisedf = pd.read_csv(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking\trial_info\practisetrials.csv', sep = ';')
-experimentaldf = pd.read_csv(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking\trial_info\experimentaltrials.csv', sep = ';')
+practisedf = pd.read_csv(r'C:/Users/stimuser/Desktop/CognNeuroSci-Undervisning/2022/group7/EGG_and_mouse_tracking/trial_info/practisetrials.csv', sep = ';')
+experimentaldf = pd.read_csv(r'C:/Users/stimuser/Desktop/CognNeuroSci-Undervisning/2022/group7/EGG_and_mouse_tracking/trial_info/experimentaltrials.csv', sep = ';')
 
 # Randomizing the order of the rows in the practise df
 practisedf = practisedf.sample(frac=1).reset_index(drop=True)
@@ -111,8 +111,8 @@ stim_image_right = visual.ImageStim(win,
     size=stim_size,
     ori=1)
 
-button_left = visual.Rect(win, size = stim_size, pos = stim_left_pos, fillColor = 'blue', opacity = 0.2)
-button_right = visual.Rect(win, size = stim_size, pos = stim_right_pos, fillColor = 'red', opacity = 0.2)
+button_left = visual.Rect(win, size = stim_size, pos = stim_left_pos, fillColor = 'blue', opacity = 0.0)
+button_right = visual.Rect(win, size = stim_size, pos = stim_right_pos, fillColor = 'red', opacity = 0.0)
 
 
 
@@ -155,8 +155,8 @@ def make_trial_list(trial_df):
             'word_trigger':TRIG_W,
             'condition_trigger':TRIG_C,
             'condition_trigger_t':'',
-            'right_img':(r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking/' + data['right_image']),
-            'left_img': (r'C:\Users\stimuser\Desktop\CognNeuroSci-Undervisning\2022\group7\EGG_and_mouse_tracking/' + data['left_image']),
+            'right_img':(r'C:/Users/stimuser/Desktop/CognNeuroSci-Undervisning/2022/group7/EGG_and_mouse_tracking/' + data['right_image']),
+            'left_img': (r'C:/Users/stimuser/Desktop/CognNeuroSci-Undervisning/2022/group7/EGG_and_mouse_tracking/' + data['left_image']),
             'img_trigger':TRIG_I,
             'onset_word':'',
             'offset_word': '',
@@ -338,8 +338,8 @@ msg(welcome_text)
 msg(instructions_text)
 msg(practice_text)
 
-event.waitKeys(keyList=KEYS_trigger)
-exp_start=core.monotonicClock.getTime()
+event.waitKeys(keyList = KEYS_trigger)
+exp_start = core.monotonicClock.getTime()
 
 '''
 CALL FUNCTION RUNNING THE EXPERIMENTAL LOOP
