@@ -113,7 +113,7 @@ stim_image_right = visual.ImageStim(win,
 button_left = visual.Rect(win, size = stim_size, pos = stim_left_pos, fillColor = 'blue', opacity = 0.2)
 button_right = visual.Rect(win, size = stim_size, pos = stim_right_pos, fillColor = 'red', opacity = 0.2)
 
-# Tse these instead if using mac with retina - for some reason there is a discrepancy between the measured mouselocation and where the stimuli is shown
+# Use these instead if using mac with retina - for some reason there is a discrepancy between the measured mouselocation and where the stimuli is shown
 #button_left = visual.Rect(win, size = (12,9.5), pos = (10,5), fillColor = 'green', opacity = 0.3)
 #button_right = visual.Rect(win, size = (-12,9.5), pos = (-10,5), fillColor = 'yellow', opacity = 0.3)
 

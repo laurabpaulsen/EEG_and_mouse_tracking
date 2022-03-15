@@ -1,0 +1,99 @@
+---
+title: "Analysis of Mousetracking Data"
+author: "Laura Paulsen"
+date: "3/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, mousetrap)
+```
+
+```{r}
+filepath = 'Stroop_mouse_EEG_data/merged/test11_01_56.csv'
+```
+
+### Reading in data and filtering 
+```{r}
+mouse <- read_csv(filepath)
+#mouse <- mouse %>% filter(phase == 'Experimental')
+mouse$trial_number <- as.factor(mouse$trial_number)
+```
+
+
+### Making the data compatible with the mousetracking package
+This is done by instead of having a row for each mouse measurenment we have a row for each trial. Then the xpos, ypos and timestamp variables are shown as a list of measurements. 
+```{r}
+df <- tibble()
+
+for(i in 1:length(unique(mouse$trial_number))){
+  data <- mouse %>% filter(trial_number == i)
+  
+  ypos <- list(data$ypos)
+  xpos <- list(data$xpos)
+  trial_timestamps <- list(data$trial_timestamp)
+  
+
+  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp, 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps)
+  
+  df <- rbind(df, newDat)
+}
+```
+
+```{r}
+colnames(mouse)
+```
+
+
+### Creating a mousetrap object
+```{r}
+mouse <- mt_import_mousetrap(df, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
+```
+
+
+### First plots
+```{r}
+mt_plot(mouse)
+```
+
+#### Colouring by trial type
+```{r}
+mt_plot(mouse, color ="trial_type")
+```
+
+#### Mirror-symmetric mapping of all the movements from the right side to the left side so that all movements overlap
+```{r}
+mouseremap <- mt_remap_symmetric(mouse)
+mt_plot(mouseremap, color ="trial_type")
+```
+
+#### Plotting x pos against time stamps
+```{r}
+mt_plot(mouseremap, x = 'timestamps', y = 'xpos')
+```
+
+#### Removing initiation
+```{r}
+noinitiation <- mt_exclude_initiation(mouseremap)
+mt_plot(noinitiation, x = 'timestamps', y = 'xpos')
+```
+
+
+
+### Normalizing time and then plotting again
+```{r}
+mousetime <- mt_time_normalize(mouseremap)
+```
+
+```{r}
+mt_plot(mousetime, use = 'tn_trajectories') #tn_trajectories are time normalized
+```
+
+
+#### Plotting averages
+```{r}
+mt_plot_aggregate(mousetime, use = 'tn_trajectories', color = 'trial_type') # time normalized
+mt_plot_aggregate(mousetime, color = 'trial_type') # normal
+```
+
