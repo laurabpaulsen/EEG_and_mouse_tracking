@@ -1,3 +1,4 @@
 Stroop_mouse_EEG_data/*
 .gitignore
 _pycache_
+.Rhistory
