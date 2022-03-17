@@ -2,10 +2,11 @@
 Code used for running experiment using both mouse-tracking and EEG.
 
 ### TO DO
-    - [ ] Set up experimental trials as well
+   
     - [ ] Add please start moving if no mouse-movement is detected within 1 second (60 Hz)
-    - [ ] Potentially save mouse positions and timestamps as a list in accuracy dataframe would be better?
-
+    
+    - [X] Save mouse positions and timestamps as a list for each trial
+    - [X] Set up experimental trials as well
     - [X] When done make buttons transparent   
     - [X] Check how file looks when including both experimental and practise trials
     - [X] Check that we can use the mousetrap package in R 

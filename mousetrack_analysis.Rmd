@@ -11,7 +11,7 @@ pacman::p_load(tidyverse, mousetrap)
 ```
 
 ```{r}
-filepath = 'Stroop_mouse_EEG_data/merged/test11_01_56.csv'
+filepath = 'Stroop_mouse_EEG_data/behavioural/INSERTFILENAME'
 ```
 
 ### Reading in data and filtering 
