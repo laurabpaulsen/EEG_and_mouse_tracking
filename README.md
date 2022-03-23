@@ -1,30 +1,11 @@
 # EEG_and_mouse_tracking
-Code used for running experiment using both mouse-tracking and EEG.
+This repository holds the code used for running and analysing experiment using a combination of mouse-tracking and EEG.
 
-### TO DO
-   
-    - [ ] Add please start moving if no mouse-movement is detected within 1 second (60 Hz)
-    
-    - [X] Save mouse positions and timestamps as a list for each trial
-    - [X] Set up experimental trials as well
-    - [X] When done make buttons transparent   
-    - [X] Check how file looks when including both experimental and practise trials
-    - [X] Check that we can use the mousetrap package in R 
-    - [X] Await trigger from scanner
-    - [X] Fix discrepancy between buttons and where it works to click wtf??? (solution: use windowsss )
-    - [X] Fix quit keys
-    - [X] Put right triggers in the right places    
-    - [X] Decide when the mouse should return to original position (maybe when images are shown?) - otherwise you can move the mouse beforehand
-    - [X] Fill out structure in the beginning of .py file
-    - [X] Calculate reaction time
-    - [X] End trial when you click on either of the botton    
-    - [X] Should if frame == 1 be changed to 0? No it should not
-    - [X] Fix merged dataframe
-        - [-] Calculate velocity of mouse (Not needed seems we can use the mousetrap package in R)
-    - [X] Better file name
-    - [-] If no click, then empty string in columns for accuracy dataframe (not needed already empty)
-    - [X] Decide on duration for fixation
-    - [X] Check that right and left img + buttons are in the right places
-    - [X] Figure out how to repeat three times
-    - [X] Decide on max length of trial and change it
-    - [X] Display intro text
+
+### Code overview
+| File                               | Purpose                   |
+| ---------------------------------- | ------------------------- |
+| `ICA.ipynb`                        | Analysis of EEG data using the `mne`-package in Python            |
+| `mousetrack_analysis.Rmd`          | Analysis of mousetracking data using the `mousetrap`-package in R |
+| `mousetracking_EEG.py`             | Code for running the experiment with EEG triggers                 |
+| `mousetracking_EEG_behavioural.py` | Code for running the experiment without EEG triggers              |
