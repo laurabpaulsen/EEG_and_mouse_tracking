@@ -46,7 +46,7 @@ for(i in 1:length(unique(data_filtered$trial_number))){
   trial_timestamps <- list(data$trial_timestamp)
   
 
-  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp, 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps)
+  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp, 'onset_image' = data$onset_img, 'time_clicked' = data$key_t, 'onset_word' = data$onset_word, 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps)
   
   df <- rbind(df, newDat)
 }
@@ -62,6 +62,10 @@ mouse <- mt_import_mousetrap(df, xpos_label = 'xpos', ypos_label = 'ypos', times
 ### Derivatives
 ```{r}
 mouse <- mt_derivatives(mouse)
+mouse <- mt_measures(mouse)
+
+
+measures <- tibble(mouse$measures)
 ```
 
 
@@ -115,7 +119,48 @@ mt_plot(mousetime, use = 'tn_trajectories') #tn_trajectories are time normalized
 ```{r}
 mt_plot_aggregate(mousetime, use = 'tn_trajectories', color = 'trial_type') # time normalized
 mt_plot_aggregate(mousetime, use = 'trajectories', color = 'trial_type') # normal
+```
+
+
+
+
+## Finding max deceleration for incongruent trials to create epochs using mne in python
+```{r}
+incongruent <- df %>% filter(trial_type == 'incongruent')
+incmouse <- mt_import_mousetrap(incongruent, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
+```
+
+
+##### Getting derivatives
+```{r}
+incmouse <- mt_derivatives(incmouse)
+incmouse <- mt_measures(incmouse)
+
+# Getting the measures from the mouse
+incmeasures <- tibble(incmouse$measures)
+
+# Getting the data from the mouse object
+incdata <- tibble(incmouse$data)
+
+# Merging them on ID
+merged <- merge(incdata, incmeasures, by = 'mt_id')
+
+
+# Extracting data for each trial (making it less messy wuhu!)
+event_inc <- tibble()
+
+for(i in unique(merged$trial_number)){
+  dat <- merged[which(merged$trial_number == i),]
+  event_inc <- rbind(event_inc, dat[1,])
+}
+
+event_inc <- event_inc %>% select(trial_number,acc_min_time, acc_max_time, onset_image, time_clicked)
 
 
 ```
+
+##### Getting ready to 
+
+
+
 
