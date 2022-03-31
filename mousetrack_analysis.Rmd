@@ -156,7 +156,7 @@ for(i in unique(merged$trial_number)){
 
 event_inc <- event_inc %>% select(trial_number,acc_min_time, acc_max_time, onset_image, time_clicked)
 
-
+write_csv(event_inc, "Stroop_mouse_EEG_data/additional_triggers.csv")
 ```
 
 ##### Getting ready to 
