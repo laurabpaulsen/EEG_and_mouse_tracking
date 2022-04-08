@@ -16,40 +16,39 @@ pacman::p_load(tidyverse, mousetrap)
 ```
 
 ```{r}
-filepath = 'Stroop_mouse_EEG_data/behavioural/participant_a_13_54_30.csv'
+filepath <- 'Stroop_mouse_EEG_data/behavioural/participant_a_13_54_30.csv'
 ```
 
 ### Reading in data and filtering 
 ```{r}
 data_loaded <- read_csv(filepath)
-data_filtered <- data_loaded %>% filter(phase == 'experimental') %>% filter(accuracy == 1)
+data_filtered <- data_loaded %>% filter(phase == 'experimental')# %>% filter(accuracy == 1)
 data_filtered$trial_number <- as.factor(data_filtered$trial_number)
-```
-
-
-### Count numbers of incorrect trials
-```{r}
-
 ```
 
 
 ### Making the data compatible with the mousetracking package (note: not needed with newest version of experimental script)
 This is done by instead of having a row for each mouse measurement we have a row for each trial. Then the xpos, ypos and timestamp variables are shown as a list of measurements. 
 ```{r}
+data_filtered = data_loaded
 df <- tibble()
 
 for(i in 1:length(unique(data_filtered$trial_number))){
-  data <- data_filtered %>% filter(trial_number == i)
+  data <- data_filtered %>% filter(trial_number == i) %>% filter(phase == 'experimental')
   
   ypos <- list(data$ypos)
   xpos <- list(data$xpos)
   trial_timestamps <- list(data$trial_timestamp)
   
 
-  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp, 'onset_image' = data$onset_img, 'time_clicked' = data$key_t, 'onset_word' = data$onset_word, 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps)
+  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp[1], 'onset_image' = data$onset_img[1], 'time_clicked' = data$key_t[1], 'onset_word' = data$onset_word[1], 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps)
   
   df <- rbind(df, newDat)
 }
+
+
+savedf <- df %>% select(rt, trial_number, trial_type, onset_image)
+write_csv(savedf, 'Stroop_mouse_EEG_data/behavioural/trial_info.csv')
 ```
 
 
@@ -67,6 +66,7 @@ mouse <- mt_measures(mouse)
 
 measures <- tibble(mouse$measures)
 ```
+
 
 
 ### First plots
@@ -87,7 +87,7 @@ mt_plot(mouseremap, color ="trial_type")
 
 #### Plotting x pos against time stamps
 ```{r}
-mt_plot(mouseremap, x = 'timestamps', y = 'xpos')
+mt_plot(mouseremap, x = 'timestamps', y = 'xpos', color ="trial_type")
 ```
 
 #### Removing finish and initiation
@@ -114,11 +114,23 @@ mousetime <- mt_time_normalize(aligned)
 ```{r}
 mt_plot(mousetime, use = 'tn_trajectories') #tn_trajectories are time normalized
 ```
+#### Plotting aggregated
+```{r}
+mt_plot_aggregate(mousetime, use = 'tn_trajectories', color = 'trial_type') # time normalized
+```
+
+
 
 #### Plotting averages
 ```{r}
-mt_plot_aggregate(mousetime, use = 'tn_trajectories', color = 'trial_type') # time normalized
-mt_plot_aggregate(mousetime, use = 'trajectories', color = 'trial_type') # normal
+mt_plot_aggregate(mousetime, use = 'tn_trajectories', color = 'trial_type', y = 'xpos', x = 'timestamps') # time normalized
+mt_plot_aggregate(mousetime, use = 'trajectories', color = 'trial_type', y = 'xpos', x = 'timestamps') # normal
+
+
+
+aligned_remap <- mt_align_start_end(mouseremap)
+aligned_remap <- mt_time_normalize(mouseremap)
+mt_plot_aggregate(aligned_remap, use = 'tn_trajectories', x = 'timestamps', y = 'xpos', color ="trial_type")
 ```
 
 
@@ -128,39 +140,109 @@ mt_plot_aggregate(mousetime, use = 'trajectories', color = 'trial_type') # norma
 ```{r}
 incongruent <- df %>% filter(trial_type == 'incongruent')
 incmouse <- mt_import_mousetrap(incongruent, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
+
+neutral <- df %>% filter(trial_type == 'neutral')
+neumouse <- mt_import_mousetrap(neutral, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
 ```
 
 
 ##### Getting derivatives
 ```{r}
-incmouse <- mt_derivatives(incmouse)
-incmouse <- mt_measures(incmouse)
+mousedataframe <- function(condition){
+  data <- df %>% filter(trial_type == condition)
+  
+  mouse_object <- mt_import_mousetrap(data, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
+  mouse_object <- mt_derivatives(mouse_object)
+  mouse_object <- mt_measures(mouse_object)
+  
+  # Getting the measures from the mouse
+  measures <- tibble(mouse_object$measures)
+  
+  # Getting the data from the mouse object
+  dat <- tibble(mouse_object$data)
+  
+  # Merging them on ID
+  merged <- merge(dat, measures, by = 'mt_id')
+  
+  # Extracting data for each trial (making it less messy wuhu!)
+  event_inc <- tibble()
 
-# Getting the measures from the mouse
-incmeasures <- tibble(incmouse$measures)
+  for(i in unique(merged$trial_number)){
+    dat <- merged[which(merged$trial_number == i),]
+    event_inc <- rbind(event_inc, dat[1,])
+    }
 
-# Getting the data from the mouse object
-incdata <- tibble(incmouse$data)
+  event_inc <- event_inc %>% select(trial_number, acc_min_time, acc_max_time, onset_image, time_clicked, MAD_time, MAD)
 
-# Merging them on ID
-merged <- merge(incdata, incmeasures, by = 'mt_id')
-
-
-# Extracting data for each trial (making it less messy wuhu!)
-event_inc <- tibble()
-
-for(i in unique(merged$trial_number)){
-  dat <- merged[which(merged$trial_number == i),]
-  event_inc <- rbind(event_inc, dat[1,])
+  write_csv(event_inc, paste0("Stroop_mouse_EEG_data/additional_triggers_", condition, ".csv"))
 }
 
-event_inc <- event_inc %>% select(trial_number,acc_min_time, acc_max_time, onset_image, time_clicked)
+mousedataframe('neutral')
+mousedataframe('incongruent')
+mousedataframe('congruent')
 
-write_csv(event_inc, "Stroop_mouse_EEG_data/additional_triggers.csv")
 ```
 
-##### Getting ready to 
 
 
 
+```{r}
+mdataframe <- function(data){
+  
+  mouse_object <- mt_import_mousetrap(data, xpos_label = 'xpos', ypos_label = 'ypos', timestamps_label = 'trial_timestamp')
+  mouse_object <- mt_derivatives(mouse_object)
+  mouse_object <- mt_measures(mouse_object)
+  
+  # Getting the measures from the mouse
+  measures <- tibble(mouse_object$measures)
+  
+  # Getting the data from the mouse object
+  dat <- tibble(mouse_object$data)
+  
+  # Merging them on ID
+  merged <- merge(dat, measures, by = 'mt_id')
+  
+  # Extracting data for each trial (making it less messy wuhu!)
+  event_inc <- tibble()
+
+  for(i in unique(merged$trial_number)){
+    dat <- merged[which(merged$trial_number == i),]
+    event_inc <- rbind(event_inc, dat[1,])
+  }
+
+  event_inc <- event_inc %>% select(trial_number, acc_min_time, acc_max_time, onset_image, rt, MAD_time, MAD, accuracy, initiation_time, trial_type)
+  
+  event_inc
+
+  write_csv(event_inc,"Stroop_mouse_EEG_data/behavioural/trial_info.csv")
+}
+
+mdataframe(df)
+
+
+```
+
+
+
+```{r}
+data_filtered = data_loaded
+df <- tibble()
+
+for(i in 1:length(unique(data_filtered$trial_number))){
+  data <- data_filtered %>% filter(trial_number == i) %>% filter(phase == 'experimental')
+  
+  ypos <- list(data$ypos)
+  xpos <- list(data$xpos)
+  trial_timestamps <- list(data$trial_timestamp)
+  
+
+  newDat <- tibble(ID = data$ID[1], 'rt' = data$rt[1], 'left_img' = data$left_img[1], 'right_img' = data$right_img[1], "trial_number" = data$trial_number[1], 'trial_type' = data$trial_type[1], "correct_resp" = data$correct_resp[1], 'onset_image' = data$onset_img[1], 'time_clicked' = data$key_t[1], 'onset_word' = data$onset_word[1], 'xpos' = xpos, 'ypos' = ypos, 'trial_timestamps' = trial_timestamps, 'accuracy' = data$accuracy[1])
+  
+  df <- rbind(df, newDat)
+}
+
+
+#savedf <- df %>% select(rt, trial_number, trial_type, onset_image, accuracy)
+#write_csv(savedf, 'Stroop_mouse_EEG_data/behavioural/trial_info.csv')
+```
 
