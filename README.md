@@ -11,8 +11,11 @@ The participant will be exposed to a decision task, in which two stimulus object
 
 ### Code overview
 | File                               | Purpose                                                           |
-| ---------------------------------- | ----------------------------------------------------------------- |
-| `ICA.ipynb`                        | Analysis of EEG data using the `mne`-package in Python            |
+| ---------------------------------- | ------------------------------------------------------------------|
+| `ICA.ipynb`                        | Cleaning data and creating epochs for further analysis            |
+| `stats.ipynb`                      | Clusterbased permutation test                                     |
+| `time_frequency.ipynb`             | Time frequency analysis of EEG signal from motor-cortex channels  |
+| `mousetracking_EEG_behavioural.py` | Code for running the experiment without EEG triggers              |
 | `mousetrack_analysis.Rmd`          | Analysis of mousetracking data using the `mousetrap`-package in R |
 | `mousetracking_EEG.py`             | Code for running the experiment with EEG triggers                 |
-| `mousetracking_EEG_behavioural.py` | Code for running the experiment without EEG triggers              |
+
