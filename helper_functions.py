@@ -45,7 +45,7 @@ def average_power_time(power, channel_indices, freq_indices_b, freq_indices_a, t
     ## averaging over the channels
     average = np.mean(data, axis = 0)
 
-    ## averaging over alpha frequencies
+    ## averaging over frequencies
     average = np.mean(average, axis = 0)
  
     return average
