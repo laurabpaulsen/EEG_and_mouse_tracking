@@ -13,7 +13,7 @@ The participant is exposed to a object discrimination task, in which two stimulu
 | File                               | Purpose                                                           |
 | ---------------------------------- | ------------------------------------------------------------------|
 | `ICA.ipynb`                        | Cleaning data and creating epochs for further analysis            |
-| `time_frequency.ipynb` | Time frequency analysis of EEG signal (Cluster-based permutation test and plotting|
+| `time_frequency.ipynb` | Time frequency analysis of EEG signal (cluster-based permutation test and plotting)|
 | `mousetracking_EEG_behavioural.py` | Code for running the experiment without EEG triggers              |
 | `mousetracking_EEG.py`             | Code for running the experiment with EEG triggers                 |
 | `mousetrack_analysis.Rmd`          | Analysis of mouse-tracking data                                   |
